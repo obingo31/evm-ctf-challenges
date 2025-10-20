@@ -117,6 +117,98 @@ test-telephone-txorigin: ## Test tx.origin demonstration
 	@echo "$(BLUE)Testing tx.origin vs msg.sender demonstration...$(NC)"
 	@cd challenges/03-Telephone && forge test --match-test testTxOriginVsMsgSender -vvvv
 
+# ─── Challenge 04: DoubleEntryPoint ───
+
+test-doubleentrypoint: ## Test DoubleEntryPoint challenge
+	@echo "$(BLUE)Testing DoubleEntryPoint challenge...$(NC)"
+	@cd challenges/04-DoubleEntryPoint && forge test -vv
+
+test-doubleentrypoint-verbose: ## Test DoubleEntryPoint challenge with verbose output
+	@echo "$(BLUE)Testing DoubleEntryPoint challenge (verbose)...$(NC)"
+	@cd challenges/04-DoubleEntryPoint && forge test -vvvv
+
+test-doubleentrypoint-assembly: ## Test DoubleEntryPoint assembly attack specifically
+	@echo "$(BLUE)Testing DoubleEntryPoint assembly attack...$(NC)"
+	@cd challenges/04-DoubleEntryPoint && forge test --match-test test_AssemblyAttack -vvvv
+
+test-doubleentrypoint-detection: ## Test detection bot functionality
+	@echo "$(BLUE)Testing DoubleEntryPoint detection bot...$(NC)"
+	@cd challenges/04-DoubleEntryPoint && forge test --match-test test_DetectionBot -vvvv
+
+# ─── Challenge 05: Casino ───
+
+test-casino: ## Test Casino challenge
+	@echo "$(BLUE)Testing Casino challenge...$(NC)"
+	@forge test --match-path "test/casino/*.t.sol" -vv
+	@cd challenges/05-Casino && forge test -vv
+
+test-casino-verbose: ## Test Casino challenge with verbose output
+	@echo "$(BLUE)Testing Casino challenge (verbose)...$(NC)"
+	@forge test --match-path "test/casino/*.t.sol" -vvvv
+	@cd challenges/05-Casino && forge test -vvvv
+
+test-casino-assembly: ## Test Casino assembly attack specifically
+	@echo "$(BLUE)Testing Casino assembly attack...$(NC)"
+	@cd challenges/05-Casino && forge test --match-test test_AssemblyAttackWinsTwice -vvvv
+
+test-casino-exploits: ## Test top-level Casino exploit harnesses
+	@echo "$(BLUE)Testing Casino exploit contracts...$(NC)"
+	@forge test --match-path "test/casino/*.t.sol" -vv
+
+# ─── Challenge 06: CrackMe ───
+
+test-crackme: ## Test CrackMe challenge
+	@echo "$(BLUE)Testing CrackMe challenge...$(NC)"
+	@cd challenges/06-CrackMe && forge test -vv
+
+test-crackme-verbose: ## Test CrackMe challenge with verbose output
+	@echo "$(BLUE)Testing CrackMe challenge (verbose)...$(NC)"
+	@cd challenges/06-CrackMe && forge test -vvvv
+
+test-crackme-solution: ## Test CrackMe solution contract specifically
+	@echo "$(BLUE)Testing CrackMe solution...$(NC)"
+	@cd challenges/06-CrackMe && forge test --match-test testSolutionContractSolves -vvvv
+
+test-crackme-reverse-engineering: ## Test CrackMe byte leakage mechanism
+	@echo "$(BLUE)Testing CrackMe byte leakage...$(NC)"
+	@cd challenges/06-CrackMe && forge test --match-path "test/ReverseEngineering.t.sol" -vvvv
+
+# ─── Challenge 07: PrivilegeFinance ───
+
+test-privilegefinance: ## Test PrivilegeFinance challenge
+	@echo "$(BLUE)Testing PrivilegeFinance challenge...$(NC)"
+	@cd challenges/07-PrivilegeFinance && forge test -v
+
+test-privilegefinance-verbose: ## Test PrivilegeFinance challenge with verbose output
+	@echo "$(BLUE)Testing PrivilegeFinance challenge (verbose)...$(NC)"
+	@cd challenges/07-PrivilegeFinance && forge test -vvv
+
+test-privilegefinance-exploit: ## Test PrivilegeFinance exploit specifically
+	@echo "$(BLUE)Testing PrivilegeFinance exploit...$(NC)"
+	@cd challenges/07-PrivilegeFinance && forge test --match-test testExploitSucceeds -vv
+
+test-privilegefinance-solve: ## Test PrivilegeFinance complete solution
+	@echo "$(BLUE)Testing PrivilegeFinance complete solve...$(NC)"
+	@cd challenges/07-PrivilegeFinance && forge test --match-test testCompleteChallenge -vv
+
+# ─── Challenge 08: LittleMoney ───
+
+test-littlemoney: ## Test LittleMoney challenge
+	@echo "$(BLUE)Testing LittleMoney challenge...$(NC)"
+	@cd challenges/08-LittleMoney && forge test -vv
+
+test-littlemoney-verbose: ## Test LittleMoney challenge with verbose output
+	@echo "$(BLUE)Testing LittleMoney challenge (verbose)...$(NC)"
+	@cd challenges/08-LittleMoney && forge test -vvvv
+
+test-littlemoney-exploit: ## Test LittleMoney exploit specifically
+	@echo "$(BLUE)Testing LittleMoney exploit...$(NC)"
+	@cd challenges/08-LittleMoney && forge test --match-test testExploitSucceeds -vv
+
+test-littlemoney-solve: ## Test LittleMoney complete solution
+	@echo "$(BLUE)Testing LittleMoney complete solve...$(NC)"
+	@cd challenges/08-LittleMoney && forge test --match-test testCompleteChallenge -vv
+
 # ═══════════════════════════════════════════════════════════════
 # Echidna Fuzzing
 # ═══════════════════════════════════════════════════════════════
@@ -128,6 +220,8 @@ echidna: ## Run Echidna on all challenges
 	@echo ""
 	@$(MAKE) echidna-fallback
 	@$(MAKE) echidna-telephone
+	@$(MAKE) echidna-doubleentrypoint
+	@$(MAKE) echidna-casino
 
 echidna-fallback: ## Run Echidna on Fallback challenge
 	@echo "$(YELLOW)═══ Challenge 02: Fallback ═══$(NC)"
@@ -205,6 +299,58 @@ echidna-telephone-verbose: ## Verbose Echidna on Telephone
 			--test-limit 100000 \
 			--format text \
 			--corpus-dir corpus
+
+echidna-doubleentrypoint: ## Run Echidna on DoubleEntryPoint challenge
+	@echo "$(YELLOW)═══ Challenge 04: DoubleEntryPoint ═══$(NC)"
+	@if [ -f challenges/04-DoubleEntryPoint/echidna/DoubleEntryPointEchidna.sol ]; then \
+		cd challenges/04-DoubleEntryPoint && \
+		echidna echidna/DoubleEntryPointEchidna.sol \
+			--contract DoubleEntryPointEchidna \
+			--config echidna/doubleentrypoint.yaml \
+			--test-limit 50000 \
+			--format text && \
+		echo "$(GREEN)✓ DoubleEntryPoint fuzzing complete!$(NC)" || \
+		echo "$(RED)✗ DoubleEntryPoint fuzzing failed$(NC)"; \
+	else \
+		echo "$(RED)✗ DoubleEntryPoint Echidna harness not found$(NC)"; \
+	fi
+	@echo ""
+
+echidna-doubleentrypoint-quick: ## Quick Echidna test on DoubleEntryPoint (10000 tests)
+	@echo "$(YELLOW)═══ Quick DoubleEntryPoint Test ═══$(NC)"
+	@echo "$(BLUE)Note: Testing delegation attack and detection bot protection$(NC)"
+	@cd challenges/04-DoubleEntryPoint && \
+		echidna echidna/DoubleEntryPointEchidna.sol \
+			--contract DoubleEntryPointEchidna \
+			--test-limit 10000 \
+			--format text; \
+		echo "$(GREEN)✓ DoubleEntryPoint fuzzing complete!$(NC)"
+
+echidna-doubleentrypoint-verbose: ## Verbose Echidna on DoubleEntryPoint
+	@echo "$(YELLOW)═══ DoubleEntryPoint (Verbose) ═══$(NC)"
+	@cd challenges/04-DoubleEntryPoint && \
+		echidna echidna/DoubleEntryPointEchidna.sol \
+			--contract DoubleEntryPointEchidna \
+			--config echidna/doubleentrypoint.yaml \
+			--test-limit 100000 \
+			--format text \
+			--corpus-dir corpus
+
+echidna-casino: ## Run Echidna on Casino challenge
+	@echo "$(YELLOW)═══ Challenge 05: Casino ═══$(NC)"
+	@if [ -f challenges/05-Casino/echidna/CasinoEchidna.sol ]; then \
+		cd challenges/05-Casino && \
+		echidna echidna/CasinoEchidna.sol \
+			--contract CasinoEchidna \
+			--config echidna/casino.yaml \
+			--test-limit 20000 \
+			--format text && \
+		echo "$(GREEN)✓ Casino fuzzing complete!$(NC)" || \
+		echo "$(RED)✗ Casino fuzzing failed$(NC)"; \
+	else \
+		echo "$(RED)✗ Casino Echidna harness not found$(NC)"; \
+	fi
+	@echo ""
 
 # ═══════════════════════════════════════════════════════════════
 # Development Helpers

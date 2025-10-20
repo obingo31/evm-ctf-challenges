@@ -1,0 +1,10 @@
+testMode: property
+testLimit: 10000
+seqLen: 50
+sender: ["0x1000", "0x2000", "0x3000"]
+deployer: "0xDEADBEEF"
+coverage: true
+checkAsserts: true
+codeSize: 0x6000
+filterBlacklist: true
+filterFunctions: ["echidna_.*"]

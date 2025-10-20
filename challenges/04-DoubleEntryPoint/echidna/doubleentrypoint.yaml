@@ -1,0 +1,13 @@
+testMode: property
+testLimit: 10000
+shrinkLimit: 5000
+seqLen: 100
+sender: ["0x1000", "0x2000", "0x3000", "0x4000", "0x5000"]
+deployer: "0x30000"
+coverage: true
+corpusDir: corpus
+checkAsserts: true
+codeSize: 0x6000
+solcArgs: --optimize
+filterBlacklist: true
+filterFunctions: ["echidna_.*"]
