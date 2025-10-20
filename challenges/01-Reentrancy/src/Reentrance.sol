@@ -15,7 +15,9 @@ contract Reentrance {
         if(balances[msg.sender] >= _amount) {
             (bool result,) = msg.sender.call{value:_amount}("");
             if(result) {
-                balances[msg.sender] -= _amount;
+                unchecked {
+                    balances[msg.sender] -= _amount;
+                }
             }
         }
     }

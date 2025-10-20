@@ -1,0 +1,98 @@
+/workspaces/evm-ctf-challenges/challenges/02-Fallback/echidna/FallbackEchidna.sol
+  1 |     | // SPDX-License-Identifier: MIT
+  2 |     | pragma solidity ^0.8.18;
+  3 |     | 
+  4 |     | import "../src/Fallback.sol";
+  5 |     | 
+  6 |     | /**
+  7 |     |  * @title FallbackEchidna
+  8 |     |  * @notice Echidna harness that demonstrates the Fallback ownership bug
+  9 |     |  * @dev Inherits the vulnerable contract so fuzzed calls exercise the real logic
+ 10 |     |  */
+ 11 | *r  | contract FallbackEchidna is Fallback {
+ 12 |     |     address internal immutable originalOwner;
+ 13 |     | 
+ 14 |     |     constructor() payable {
+ 15 | *   |         originalOwner = owner;
+ 16 |     |     }
+ 17 |     | 
+ 18 |     |     /**
+ 19 |     |      * @notice Property: the original deployer must always remain owner
+ 20 |     |      * @dev Echidna will find a counterexample by contributing and then triggering the receive path
+ 21 |     |      */
+ 22 |     |     function echidna_owner_never_changes() public view returns (bool) {
+ 23 |     |         return owner == originalOwner;
+ 24 |     |     }
+ 25 |     | 
+ 26 |     |     /**
+ 27 |     |      * @notice Helper that mirrors the vulnerable receive logic with explicit call
+ 28 |     |      * @dev Allows Echidna to drive the ownership change using standard function invocation
+ 29 |     |      */
+ 30 |     |     function echidna_owner_has_1000eth() public view returns (bool) {
+ 31 |     |         if (owner != originalOwner) {
+ 32 |     |             return contributions[owner] > 1000 ether;
+ 33 |     |         }
+ 34 |     |         return true;
+ 35 |     |     }
+ 36 |     | 
+ 37 |     |     /**
+ 38 |     |      * @notice Property: owner should never be zero address
+ 39 |     |      * @dev Basic sanity check
+ 40 |     |      * Expected: PASS
+ 41 |     |      */
+ 42 |     |     function echidna_owner_not_zero() public view returns (bool) {
+ 43 |     |         return owner != address(0);
+ 44 |     |     }
+ 45 |     | 
+ 46 |     |     /**
+ 47 |     |      * @notice Property: owner must have made a contribution
+ 48 |     |      * @dev If owner changed, they must have contributed something
+ 49 |     |      * Expected: Could PASS or FAIL depending on attack path
+ 50 |     |      */
+ 51 |     |     function echidna_owner_has_contribution() public view returns (bool) {
+ 52 |     |         return contributions[owner] > 0;
+ 53 |     |     }
+ 54 |     | }
+ 55 |     | 
+
+/workspaces/evm-ctf-challenges/challenges/02-Fallback/src/Fallback.sol
+  1 |     | // SPDX-License-Identifier: MIT
+  2 |     | pragma solidity ^0.8.18;
+  3 |     | 
+  4 |     | contract Fallback {
+  5 | *   |     mapping(address => uint256) public contributions;
+  6 | *   |     address public owner;
+  7 |     | 
+  8 |     |     constructor() {
+  9 | *   |         owner = msg.sender;
+ 10 | *   |         contributions[msg.sender] = 1000 * (1 ether);
+ 11 |     |     }
+ 12 |     | 
+ 13 |     |     modifier onlyOwner() {
+ 14 | *r  |         require(msg.sender == owner, "caller is not the owner");
+ 15 |     |         _;
+ 16 |     |     }
+ 17 |     | 
+ 18 | *   |     function contribute() public payable {
+ 19 | *r  |         require(msg.value < 0.001 ether);
+ 20 | *   |         contributions[msg.sender] += msg.value;
+ 21 | *   |         if (contributions[msg.sender] > contributions[owner]) {
+ 22 |     |             owner = msg.sender;
+ 23 |     |         }
+ 24 |     |     }
+ 25 |     | 
+ 26 | *   |     function getContribution() public view returns (uint256) {
+ 27 | *   |         return contributions[msg.sender];
+ 28 |     |     }
+ 29 |     | 
+ 30 | *r  |     function withdraw() public onlyOwner {
+ 31 | *   |         payable(owner).transfer(address(this).balance);
+ 32 |     |     }
+ 33 |     | 
+ 34 |     |     receive() external payable {
+ 35 |     |         require(msg.value > 0 && contributions[msg.sender] > 0);
+ 36 |     |         owner = msg.sender;
+ 37 |     |     }
+ 38 |     | }
+ 39 |     | 
+

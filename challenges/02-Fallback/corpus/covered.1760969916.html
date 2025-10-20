@@ -1,0 +1,106 @@
+<style> code { white-space: pre-wrap; display: block; background-color: #eee; }.executed { background-color: #afa; }.reverted { background-color: #ffa; }.unexecuted { background-color: #faa; }.neutral { background-color: #eee; }</style><b>/workspaces/evm-ctf-challenges/challenges/02-Fallback/echidna/FallbackEchidna.sol</b>
+<code>
+  1 |     | <span class='neutral'>// SPDX-License-Identifier: MIT</span>
+  2 |     | <span class='neutral'>pragma solidity ^0.8.18;</span>
+  3 |     | <span class='neutral'></span>
+  4 |     | <span class='neutral'>import &quot;../src/Fallback.sol&quot;;</span>
+  5 |     | <span class='neutral'></span>
+  6 |     | <span class='neutral'>/**</span>
+  7 |     | <span class='neutral'> * @title FallbackEchidna</span>
+  8 |     | <span class='neutral'> * @notice Echidna harness that demonstrates the Fallback ownership bug</span>
+  9 |     | <span class='neutral'> * @dev Inherits the vulnerable contract so fuzzed calls exercise the real logic</span>
+ 10 |     | <span class='neutral'> */</span>
+ 11 | *r  | <span class='executed'>contract FallbackEchidna is Fallback {</span>
+ 12 |     | <span class='neutral'>    address internal immutable originalOwner;</span>
+ 13 |     | <span class='neutral'></span>
+ 14 |     | <span class='neutral'>    constructor() payable {</span>
+ 15 | *   | <span class='executed'>        originalOwner = owner;</span>
+ 16 |     | <span class='neutral'>    }</span>
+ 17 |     | <span class='neutral'></span>
+ 18 |     | <span class='neutral'>    /**</span>
+ 19 |     | <span class='neutral'>     * @notice Property: the original deployer must always remain owner</span>
+ 20 |     | <span class='neutral'>     * @dev Echidna will find a counterexample by contributing and then triggering the receive path</span>
+ 21 |     | <span class='neutral'>     */</span>
+ 22 |     | <span class='unexecuted'>    function echidna_owner_never_changes() public view returns (bool) {</span>
+ 23 |     | <span class='unexecuted'>        return owner == originalOwner;</span>
+ 24 |     | <span class='neutral'>    }</span>
+ 25 |     | <span class='neutral'></span>
+ 26 |     | <span class='neutral'>    /**</span>
+ 27 |     | <span class='neutral'>     * @notice Helper that mirrors the vulnerable receive logic with explicit call</span>
+ 28 |     | <span class='neutral'>     * @dev Allows Echidna to drive the ownership change using standard function invocation</span>
+ 29 |     | <span class='neutral'>     */</span>
+ 30 |     | <span class='unexecuted'>    function echidna_owner_has_1000eth() public view returns (bool) {</span>
+ 31 |     | <span class='unexecuted'>        if (owner != originalOwner) {</span>
+ 32 |     | <span class='unexecuted'>            return contributions[owner] &gt; 1000 ether;</span>
+ 33 |     | <span class='neutral'>        }</span>
+ 34 |     | <span class='unexecuted'>        return true;</span>
+ 35 |     | <span class='neutral'>    }</span>
+ 36 |     | <span class='neutral'></span>
+ 37 |     | <span class='neutral'>    /**</span>
+ 38 |     | <span class='neutral'>     * @notice Property: owner should never be zero address</span>
+ 39 |     | <span class='neutral'>     * @dev Basic sanity check</span>
+ 40 |     | <span class='neutral'>     * Expected: PASS</span>
+ 41 |     | <span class='neutral'>     */</span>
+ 42 |     | <span class='unexecuted'>    function echidna_owner_not_zero() public view returns (bool) {</span>
+ 43 |     | <span class='unexecuted'>        return owner != address(0);</span>
+ 44 |     | <span class='neutral'>    }</span>
+ 45 |     | <span class='neutral'></span>
+ 46 |     | <span class='neutral'>    /**</span>
+ 47 |     | <span class='neutral'>     * @notice Property: owner must have made a contribution</span>
+ 48 |     | <span class='neutral'>     * @dev If owner changed, they must have contributed something</span>
+ 49 |     | <span class='neutral'>     * Expected: Could PASS or FAIL depending on attack path</span>
+ 50 |     | <span class='neutral'>     */</span>
+ 51 |     | <span class='unexecuted'>    function echidna_owner_has_contribution() public view returns (bool) {</span>
+ 52 |     | <span class='unexecuted'>        return contributions[owner] &gt; 0;</span>
+ 53 |     | <span class='neutral'>    }</span>
+ 54 |     | <span class='neutral'>}</span>
+ 55 |     | <span class='neutral'></span>
+
+</code>
+<br />
+
+<b>/workspaces/evm-ctf-challenges/challenges/02-Fallback/src/Fallback.sol</b>
+<code>
+  1 |     | <span class='neutral'>// SPDX-License-Identifier: MIT</span>
+  2 |     | <span class='neutral'>pragma solidity ^0.8.18;</span>
+  3 |     | <span class='neutral'></span>
+  4 |     | <span class='unexecuted'>contract Fallback {</span>
+  5 | *   | <span class='executed'>    mapping(address =&gt; uint256) public contributions;</span>
+  6 | *   | <span class='executed'>    address public owner;</span>
+  7 |     | <span class='neutral'></span>
+  8 |     | <span class='unexecuted'>    constructor() {</span>
+  9 | *   | <span class='executed'>        owner = msg.sender;</span>
+ 10 | *   | <span class='executed'>        contributions[msg.sender] = 1000 * (1 ether);</span>
+ 11 |     | <span class='neutral'>    }</span>
+ 12 |     | <span class='neutral'></span>
+ 13 |     | <span class='neutral'>    modifier onlyOwner() {</span>
+ 14 | *r  | <span class='executed'>        require(msg.sender == owner, &quot;caller is not the owner&quot;);</span>
+ 15 |     | <span class='neutral'>        _;</span>
+ 16 |     | <span class='neutral'>    }</span>
+ 17 |     | <span class='neutral'></span>
+ 18 | *   | <span class='executed'>    function contribute() public payable {</span>
+ 19 | *r  | <span class='executed'>        require(msg.value &lt; 0.001 ether);</span>
+ 20 | *   | <span class='executed'>        contributions[msg.sender] += msg.value;</span>
+ 21 | *   | <span class='executed'>        if (contributions[msg.sender] &gt; contributions[owner]) {</span>
+ 22 |     | <span class='unexecuted'>            owner = msg.sender;</span>
+ 23 |     | <span class='neutral'>        }</span>
+ 24 |     | <span class='neutral'>    }</span>
+ 25 |     | <span class='neutral'></span>
+ 26 | *   | <span class='executed'>    function getContribution() public view returns (uint256) {</span>
+ 27 | *   | <span class='executed'>        return contributions[msg.sender];</span>
+ 28 |     | <span class='neutral'>    }</span>
+ 29 |     | <span class='neutral'></span>
+ 30 | *r  | <span class='executed'>    function withdraw() public onlyOwner {</span>
+ 31 | *   | <span class='executed'>        payable(owner).transfer(address(this).balance);</span>
+ 32 |     | <span class='neutral'>    }</span>
+ 33 |     | <span class='neutral'></span>
+ 34 |     | <span class='neutral'>    receive() external payable {</span>
+ 35 |     | <span class='unexecuted'>        require(msg.value &gt; 0 &amp;&amp; contributions[msg.sender] &gt; 0);</span>
+ 36 |     | <span class='unexecuted'>        owner = msg.sender;</span>
+ 37 |     | <span class='neutral'>    }</span>
+ 38 |     | <span class='neutral'>}</span>
+ 39 |     | <span class='neutral'></span>
+
+</code>
+<br />
+

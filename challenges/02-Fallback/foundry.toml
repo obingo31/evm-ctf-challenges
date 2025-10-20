@@ -1,0 +1,6 @@
+[profile.default]
+src = "src"
+out = "out"
+remappings = ["forge-std=/workspaces/evm-ctf-challenges/lib/forge-std/src"]
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
