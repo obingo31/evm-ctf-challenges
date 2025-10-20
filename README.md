@@ -142,6 +142,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 - [Ethernaut](https://ethernaut.openzeppelin.com/) by OpenZeppelin
 - [Foundry](https://github.com/foundry-rs/foundry) by Paradigm
+- [CTF Blockchain](https://github.com/minaminao/ctf-blockchain) by minaminao
 - Ethereum security community
 
 ## 📬 Contact
