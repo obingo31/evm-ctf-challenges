@@ -23,9 +23,9 @@ Learn EVM Assembly through hands-on Ethernaut CTF challenges. This repository co
 | 03 | [Telephone](./challenges/03-Telephone/) | ⭐ | tx.origin Attack | ✅ Complete |
 | 04 | [DoubleEntryPoint](./challenges/04-DoubleEntryPoint/) | ⭐⭐⭐ | Delegation Attack | ✅ Complete |
 | 05 | [Casino](./challenges/05-Casino/) | ⭐⭐ | Predictable RNG | ✅ Complete |
-| 06 | Delegation | ⭐⭐⭐ | Delegatecall | 🚧 Coming Soon |
-| 07 | Vault | ⭐⭐ | Storage Slots | 🚧 Coming Soon |
-| 08 | King | ⭐⭐ | DoS Attack | 🚧 Coming Soon |
+| 06 | [CrackMe](./challenges/06-CrackMe/) | ⭐⭐⭐ | Storage Leakage | ✅ Complete |
+| 07 | [PrivilegeFinance](./challenges/07-PrivilegeFinance/) | ⭐⭐⭐ | Signature Spoofing | ✅ Complete |
+| 08 | [LittleMoney](./challenges/08-LittleMoney/) | ⭐⭐⭐ | Function Pointer Manipulation | ✅ Complete |
 
 ## 🛠️ Prerequisites
 
