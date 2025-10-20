@@ -21,9 +21,11 @@ Learn EVM Assembly through hands-on Ethernaut CTF challenges. This repository co
 | 01 | [Reentrancy](./challenges/01-Reentrancy/) | ⭐⭐⭐ | External Calls | ✅ Complete |
 | 02 | [Fallback](./challenges/02-Fallback/) | ⭐ | Fallback Ownership | ✅ Complete |
 | 03 | [Telephone](./challenges/03-Telephone/) | ⭐ | tx.origin Attack | ✅ Complete |
-| 04 | Delegation | ⭐⭐⭐ | Delegatecall | 🚧 Coming Soon |
-| 05 | Vault | ⭐⭐ | Storage Slots | 🚧 Coming Soon |
-| 06 | King | ⭐⭐ | DoS Attack | 🚧 Coming Soon |
+| 04 | [DoubleEntryPoint](./challenges/04-DoubleEntryPoint/) | ⭐⭐⭐ | Delegation Attack | ✅ Complete |
+| 05 | [Casino](./challenges/05-Casino/) | ⭐⭐ | Predictable RNG | ✅ Complete |
+| 06 | Delegation | ⭐⭐⭐ | Delegatecall | 🚧 Coming Soon |
+| 07 | Vault | ⭐⭐ | Storage Slots | 🚧 Coming Soon |
+| 08 | King | ⭐⭐ | DoS Attack | 🚧 Coming Soon |
 
 ## 🛠️ Prerequisites
 
@@ -57,26 +59,29 @@ forge test -vvvv
 ## 🎓 Learning Path
 
 ### Beginner
+
 1. Read the challenge description
-2. Analyze the vulnerable contract
-3. Understand the vulnerability
-4. Study the exploit code
+1. Analyze the vulnerable contract
+1. Understand the vulnerability
+1. Study the exploit code
 
 ### Intermediate
-5. Rewrite exploits in pure assembly
-6. Optimize gas usage
-7. Add additional test cases
+
+1. Rewrite exploits in pure assembly
+1. Optimize gas usage
+1. Add additional test cases
 
 ### Advanced
-8. Create your own variations
-9. Combine multiple vulnerabilities
-10. Write security reports
+
+1. Create your own variations
+1. Combine multiple vulnerabilities
+1. Write security reports
 
 ## 🔬 Challenge Structure
 
 Each challenge includes:
 
-```
+```text
 challenge-name/
 ├── README.md           # Challenge description & walkthrough
 ├── src/
@@ -106,14 +111,16 @@ forge test --match-test testExploit -vvvvv
 
 ⚠️ **FOR EDUCATIONAL PURPOSES ONLY**
 
-This repository contains vulnerable smart contracts and exploits for learning purposes. 
+This repository contains vulnerable smart contracts and exploits for learning purposes.
 
 **DO NOT:**
+
 - Deploy these contracts to mainnet
 - Use these techniques maliciously
 - Attack contracts without permission
 
 **DO:**
+
 - Learn from the vulnerabilities
 - Practice secure coding
 - Share knowledge responsibly
@@ -140,6 +147,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 ## 📬 Contact
 
 **Obingo31** - Founder @ Malo Labs
+
 - GitHub: [@obingo31](https://github.com/obingo31)
 - Website: [malo-labs.gitbook.io](https://malo-labs.gitbook.io/documentation)
 
@@ -147,4 +155,4 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ⭐ Star this repo if you find it helpful!
 
-**Happy Hacking! 🔓**
+## Happy Hacking! 🔓
