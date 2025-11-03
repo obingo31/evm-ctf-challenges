@@ -26,6 +26,9 @@ Learn EVM Assembly through hands-on Ethernaut CTF challenges. This repository co
 | 06 | [CrackMe](./challenges/06-CrackMe/) | ⭐⭐⭐ | Storage Leakage | ✅ Complete |
 | 07 | [PrivilegeFinance](./challenges/07-PrivilegeFinance/) | ⭐⭐⭐ | Signature Spoofing | ✅ Complete |
 | 08 | [LittleMoney](./challenges/08-LittleMoney/) | ⭐⭐⭐ | Function Pointer Manipulation | ✅ Complete |
+| 09 | [ManipulateMint](./challenges/09-ManipulateMint/) | ⭐⭐⭐ | Storage Slot Manipulation | ✅ Complete |
+| 11 | [GasGrief](./challenges/11-GasGrief/) | ⭐⭐⭐⭐ | Gas Griefing & DoS | ✅ Complete |
+| 12 | [TimeLocked](./challenges/12-TimeLocked/) | ⭐⭐⭐⭐ | Timestamp Manipulation | ✅ Complete |
 
 ## 🛠️ Prerequisites
 
@@ -45,6 +48,14 @@ forge install
 
 # Run tests for a specific challenge
 forge test --match-path challenges/01-Reentrancy/test/*.t.sol -vvvv
+
+# Test advanced challenges with Makefile
+make test-gasgrief        # Gas griefing attacks
+make test-timelocked      # Timestamp manipulation
+
+# Run comprehensive demos
+make demo-gasgrief        # Complete gas griefing demonstration
+make demo-timelocked      # Timestamp attack showcase
 
 # Run all tests
 forge test -vvvv
@@ -97,6 +108,12 @@ challenge-name/
 # Run specific test with detailed output
 forge test --match-contract ReentranceTest -vvvv
 
+# Advanced challenge testing with Makefile
+make test-gasgrief-attack     # Gas griefing attack vectors
+make test-timelocked-attack   # Timestamp manipulation attacks
+make analyze-gasgrief-consumption  # Gas consumption analysis
+make analyze-timelocked-timing     # Timestamp risk analysis
+
 # Check gas reports
 forge test --gas-report
 
@@ -106,6 +123,34 @@ forge coverage
 # Run with traces
 forge test --match-test testExploit -vvvvv
 ```
+
+## 🎯 Advanced Challenges
+
+The repository now includes **advanced vulnerability patterns**:
+
+### 🔥 Challenge 11: GasGrief
+
+- **Gas griefing attacks** and DoS vulnerabilities
+- **25 comprehensive tests** covering all attack vectors
+- **Unbounded loops** and quadratic gas consumption
+- **Mitigation strategies** with pagination and gas limits
+- **Interactive deployment** with real-time attack demos
+
+### ⏰ Challenge 12: TimeLocked
+
+- **Timestamp manipulation** vulnerabilities
+- **21 comprehensive tests** with attack demonstrations
+- **Governance timelock bypass** techniques
+- **Secure timing mechanisms** and commit-reveal schemes
+- **Risk analysis functions** for manipulation detection
+
+Both challenges include:
+
+- 🎯 **Production-ready contracts** with educational vulnerabilities
+- 🧪 **Comprehensive test suites** with fuzz testing
+- 📚 **Detailed documentation** with real-world examples
+- 🚀 **Interactive deployment scripts** for live demonstrations
+- 🛠️ **Enhanced Makefile commands** for specialized testing
 
 ## 🛡️ Security Disclaimer
 
