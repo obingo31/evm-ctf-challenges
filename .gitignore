@@ -10,8 +10,25 @@ broadcast/
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-# Dotenv file
+# Dotenv file and environment variables
 .env
+.env.*
+!.env.example
+
+# Private keys and secrets (CRITICAL SECURITY)
+*.key
+*.pem
+*.p12
+*.pfx
+private_key*
+privatekey*
+PRIVATE_KEY*
+secret*
+mnemonic*
+keystore/
+wallets/
+accounts/
+.secret*
 
 # IDE
 .vscode/
@@ -34,3 +51,21 @@ challenges/**/echidna/corpus/
 
 # OS
 .DS_Store
+Thumbs.db
+
+# Deployment artifacts with sensitive data
+deployments/
+deployment-*.json
+deploy-logs/
+addresses.json
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.pid
+
+# Security scan results
+slither-*
+mythril-*
+*.sarif
