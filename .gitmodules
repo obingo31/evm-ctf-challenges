@@ -4,3 +4,12 @@
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "challenges/09-ManipulateMint/lib/forge-std"]
+	path = challenges/09-ManipulateMint/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "challenges/11-GasGrief/lib/forge-std"]
+	path = challenges/11-GasGrief/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "challenges/12-TimeLocked/lib/forge-std"]
+	path = challenges/12-TimeLocked/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
